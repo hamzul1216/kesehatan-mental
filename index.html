@@ -16,18 +16,22 @@
     <script src="https://unpkg.com/feather-icons"></script>
 
     <!-- My Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
     <!-- Navbar Start -->
     <nav class="navbar">
-        <a href="#" class="navbar-logo">Kesehatan<span>Mental</span></a>
+        <a href="#" class="navbar-logo">Kesehatan<span> Mental</span></a>
 
         <div class="navbar-nav">
             <a href="#hero">Home</a>
-            <a href="#about">Tentang Kami</a>
-            <a href="#menu">Menu</a>
+            <a href="#service">Layanan</a>
+            <a href="#psikotes">Psikotes</a>
+            <a href="#blog">Blog</a>
             <a href="#contact">Kontak</a>
         </div>
 
@@ -41,16 +45,16 @@
     <section id="hero">
         <div class="hero main-container">
             <div class="hero-left">
-                <h1>Kenali Dirimu Temukan Potensi <span>Terbaikmu</span>!</h1>
+                <h1>Kenali Dirimu, Temukan Potensi <span>Terbaikmu</span>!</h1>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nam, maiores? Recusandae suscipit error
                     excepturi assumenda nihil maiores quibusdam exercitationem. Labore, officiis beatae repudiandae
                     dicta
                     aperiam iure ipsam libero sed tenetur.
                 </p>
-                <a href="#" class="cta">Ikuti Tes</a>
+                <a href="#psikotes" class="cta">Ikuti Tes</a>
             </div>
             <div class="hero-right">
-                <img src="img/hero.png" alt="xxx" />
+                <img src="assets/img/hero.png" alt="xxx" />
             </div>
         </div>
     </section>
@@ -93,13 +97,164 @@
 
     <!-- Services Section End -->
 
+    <!-- Psikotes Section Start-->
+    <section id="psikotes">
+        <div class="psikotes main-container">
+            <h2>Eksplorasi Diri Kamu dengan Psikotes <i style="color: #6b7074;">Kesehatan<span> Mental</span></i></h2>
+
+            <div class="psikotes-grid">
+                <div class="psikotes-card">
+                    <img src="assets/img/mbti.jpg" alt="Tes Kepribadian MBTI">
+                    <h3>Tes Kepribadian MBTI</h3>
+                    <p>Kenali dirimu lebih dalam melalui MBTI.</p>
+                    <button>Ikuti Tes</button>
+                </div>
+
+                <div class="psikotes-card">
+                    <img src="assets/img/coming soon.jpg" alt="Tes Level Kurikulum">
+                    <h3>Tes IQ</h3>
+                    <p>Temukan seberapa baik kamu dalam memecahkan masalah, berpikir logis, dan memahami pola</p>
+                    <button>Ikuti Tes</button>
+                </div>
+
+                <div class="psikotes-card">
+                    <img src="assets/img/coming soon.jpg" alt="Tes Kesehatan Finansial">
+                    <h3>Tes Kesehatan Finansial</h3>
+                    <p>Ukur sejauh mana kamu mengelola keuangan dengan baik.</p>
+                    <button>Ikuti Tes</button>
+                </div>
+
+                <div class="psikotes-card">
+                    <img src="assets/img/coming soon.jpg" alt="Tes Tingkat Rasa Kesepian">
+                    <h3>Tes Tingkat Rasa Kesepian</h3>
+                    <p>Ukur tingkat kesepianmu dan cari solusinya.</p>
+                    <button>Ikuti Tes</button>
+                </div>
+
+                <div class="psikotes-card">
+                    <img src="assets/img/coming soon.jpg" alt="Tes Love Language">
+                    <h3>Tes Love Language</h3>
+                    <p>Temukan tipe bahasa cinta yang paling sesuai denganmu.</p>
+                    <button>Ikuti Tes</button>
+                </div>
+
+                <div class="psikotes-card">
+                    <img src="assets/img/coming soon.jpg" alt="Tes Tingkat Keparahan Stres">
+                    <h3>Tes Tingkat Keparahan Stres</h3>
+                    <p>Kenali tingkat stres yang kamu alami dan cara mengatasinya.</p>
+                    <button>Ikuti Tes</button>
+                </div>
+            </div>
+
+            <div class="see-more">
+                <a href="./psikotes/psikotes.html">
+                    <button>Lihat Lebih Banyak</button>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Psikotes Section End -->
+
+    <!-- Blog Section Start -->
+    <section id="blog">
+        <div class="blog main-container">
+            <h2>Baca Artikel <i style="color: #6b7074;">Kesehatan<span> Mental</span></i></h2>
+            <p class="blog-desc">Temukan informasi menarik seputar kesehatan mental, psikologi, dan pengembangan diri.
+            </p>
+
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <img src="assets/img/coming soon.jpg" alt="Mengatasi Stres">
+                    <h3>Cara Efektif Mengatasi Stres Sehari-hari</h3>
+                    <p>Pelajari berbagai teknik untuk mengelola stres agar hidup lebih tenang dan bahagia.</p>
+                    <a href="#">Baca Selengkapnya</a>
+                </div>
+
+                <div class="blog-card">
+                    <img src="assets/img/coming soon.jpg" alt="Self Love">
+                    <h3>Mengenal dan Menerapkan Self Love</h3>
+                    <p>Kenali pentingnya mencintai diri sendiri dan cara menerapkannya dalam kehidupan sehari-hari.</p>
+                    <a href="#">Baca Selengkapnya</a>
+                </div>
+
+                <div class="blog-card">
+                    <img src="assets/img/coming soon.jpg" alt="Menjaga Kesehatan Mental">
+                    <h3>Tips Menjaga Kesehatan Mental di Era Digital</h3>
+                    <p>Bagaimana cara menjaga kesehatan mental di tengah tekanan media sosial dan dunia digital?</p>
+                    <a href="#">Baca Selengkapnya</a>
+                </div>
+            </div>
+
+            <div class="see-more">
+                <a href="./blog/blog.html">
+                    <button>Lihat Lebih Banyak</button>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+
+    <!-- Contact Section Start -->
+    <section id="contact">
+        <div class="contact main-container">
+            <h2>Hubungi Kami</h2>
+            <p>Jika Anda memiliki pertanyaan atau ingin bekerja sama, jangan ragu untuk menghubungi kami.</p>
+
+            <div class="contact-form">
+                <form action="#" method="POST">
+                    <label for="nama">Nama</label>
+                    <input type="text" id="nama" name="nama" placeholder="Masukkan nama Anda" required />
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required />
+
+                    <label for="pesan">Pesan</label>
+                    <textarea id="pesan" name="pesan" placeholder="Tulis pesan Anda..." rows="5" required></textarea>
+
+                    <button type="submit">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section End -->
+
+    <!-- Footer Section Start-->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <h3>Kesehatan Mental</h3>
+                <p>&copy; 2025 Kesehatan Mental. All rights reserved.</p>
+                <p class="portofolio">Website ini dibuat oleh | <a href="https://hamzahsite.netlify.app/"
+                        target="_blank">Hamzah Hasan</a></p>
+            </div>
+            <div class="footer-center">
+                <ul>
+                    <li><a href="#">Tentang</a></li>
+                    <li><a href="#">Kontak</a></li>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                <p>Ikuti Kami:</p>
+                <div class="social-icons">
+                    <a href="#"><i data-feather="facebook"></i></a>
+                    <a href="#"><i data-feather="twitter"></i></a>
+                    <a href="#"><i data-feather="instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End-->
+
+
     <!-- Feather Icons -->
     <script>
         feather.replace();
     </script>
 
     <!-- My Javascript -->
-    <script src="js/script.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 
 </html>

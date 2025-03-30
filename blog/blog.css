@@ -1,0 +1,9 @@
+#blog {
+  padding-top: 10rem;
+  padding-bottom: 8rem;
+  background-color: var(--primaryBackgroundColor);
+}
+
+#contact {
+  background-color: var(--thirdBackgroundColor);
+}
