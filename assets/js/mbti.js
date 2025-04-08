@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevButton = document.getElementById("prev-btn");
   const nextButton = document.getElementById("next-btn");
 
-  // Cek UID user, pakai UUID
   let userId = localStorage.getItem("userId");
   if (!userId) {
     userId = uuid.v4();
@@ -59,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
-  // Start quiz
   startButton.addEventListener("click", () => {
     document.querySelector(".custom-card").style.display = "none";
     quizContainer.style.display = "block";
@@ -126,26 +124,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // SHARE RESULT
+  // SHARE RESULT with Toastify
   window.shareResult = function () {
     const uid = localStorage.getItem("uid");
     const mbti = localStorage.getItem("mbtiType");
 
     if (!uid || !mbti) {
-      alert("Hasil tidak tersedia untuk dibagikan.");
+      Toastify({
+        text: "Hasil tidak tersedia untuk dibagikan.",
+        backgroundColor: "#f44336",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
       return;
     }
 
     const shareURL = `${window.location.origin}/psikotes/mbti.html?uid=${uid}&type=${mbti}`;
     navigator.clipboard.writeText(shareURL).then(() => {
-      alert("Link hasil berhasil disalin! 📋\nBagikan ke temanmu ✨");
+      Toastify({
+        text: "Link hasil berhasil disalin! 📋 Bagikan ke temanmu ✨",
+        backgroundColor: "#ffb870",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
     });
   };
 
   // SIMPAN DAN TAMPILKAN HASIL
   function showResult() {
     if (answers.length < questions.length || answers.includes(undefined)) {
-      alert("Harap jawab semua pertanyaan sebelum melihat hasil.");
+      Toastify({
+        text: "Harap jawab semua pertanyaan sebelum melihat hasil.",
+        backgroundColor: "#f44336",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
       return;
     }
 
@@ -168,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const tanggalSekarang = new Date().toLocaleString("sv-SE", {
       timeZone: "Asia/Jakarta",
     });
-    // Format: "2025-04-08 13:09:56" (lebih rapi buat di database juga)
 
     const data = {
       id: newRef.key,
@@ -192,7 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error menyimpan hasil MBTI: ", error);
-        alert("Gagal menyimpan hasil. Coba lagi.");
+        Toastify({
+          text: "Gagal menyimpan hasil. Coba lagi.",
+          backgroundColor: "#f44336",
+          duration: 3000,
+          gravity: "top",
+          position: "center",
+        }).showToast();
       });
   }
 
