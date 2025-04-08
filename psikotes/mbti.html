@@ -207,6 +207,75 @@
             cursor: not-allowed;
         }
 
+        .result-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .result-heading {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primaryTextColor);
+        }
+
+        .result-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--boxShadow);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .result-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--primaryButtonColor);
+            margin-bottom: 1rem;
+        }
+
+        .result-title .nickname {
+            font-weight: normal;
+            color: var(--secondaryTextColor);
+        }
+
+        .result-description {
+            font-size: 1rem;
+            color: var(--secondaryTextColor);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .desc-main {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--primaryTextColor);
+        }
+
+        .share {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.8rem 1rem;
+        }
+
+        .share-icon {
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .share-icon:hover {
+            transform: scale(1.15);
+            opacity: 0.8;
+        }
+
+
         /* Tambahan untuk efek transisi antar pertanyaan */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -342,10 +411,21 @@
         feather.replace();
     </script>
 
+    <!-- UUID -->
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+    <!-- Firebase Config -->
+    <script type="module" src="../assets/js/firebase-config.js"></script>
+
     <!-- My Javascript -->
-    <script src="../assets/js/mbtiResult.js"></script>
-    <script src="../assets/js/script.js"></script>
-    <script src="../assets/js/mbti.js"></script>
+    <script type="module" src="../assets/js/mbtiResult.js"></script>
+    <script type="module" src="../assets/js/script.js"></script>
+    <script type="module" src="../assets/js/mbti.js"></script>
 </body>
 
 </html>

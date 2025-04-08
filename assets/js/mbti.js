@@ -1,3 +1,10 @@
+import { db } from "./firebase-config.js";
+import {
+  ref,
+  set,
+  push,
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const startButton = document.querySelector(".card-button");
   const quizContainer = document.getElementById("quiz-container");
@@ -7,6 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressFill = document.getElementById("progress-fill");
   const prevButton = document.getElementById("prev-btn");
   const nextButton = document.getElementById("next-btn");
+
+  // Cek UID user, pakai UUID
+  let userId = localStorage.getItem("userId");
+  if (!userId) {
+    userId = uuid.v4();
+    localStorage.setItem("userId", userId);
+  }
 
   let currentQuestionIndex = 0;
   let answers = [];
@@ -45,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
+  // Start quiz
   startButton.addEventListener("click", () => {
     document.querySelector(".custom-card").style.display = "none";
     quizContainer.style.display = "block";
@@ -55,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const q = questions[currentQuestionIndex];
     questionText.innerText = q.question;
     answerButtons.innerHTML = "";
-    quizContainer.classList.add("fade-in"); // Tambah efek fade-in
+    quizContainer.classList.add("fade-in");
 
     q.options.forEach((option, index) => {
       const btn = document.createElement("div");
@@ -63,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerText = option;
 
       if (answers[currentQuestionIndex] === index) {
-        btn.classList.add("selected"); // Highlight jawaban yang dipilih
+        btn.classList.add("selected");
       }
 
       btn.addEventListener("click", () => selectAnswer(index));
@@ -84,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function selectAnswer(index) {
     answers[currentQuestionIndex] = index;
     loadQuestion();
+
     setTimeout(() => {
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
@@ -110,21 +126,82 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // SHARE RESULT
+  window.shareResult = function () {
+    const uid = localStorage.getItem("uid");
+    const mbti = localStorage.getItem("mbtiType");
+
+    if (!uid || !mbti) {
+      alert("Hasil tidak tersedia untuk dibagikan.");
+      return;
+    }
+
+    const shareURL = `${window.location.origin}/psikotes/mbti.html?uid=${uid}&type=${mbti}`;
+    navigator.clipboard.writeText(shareURL).then(() => {
+      alert("Link hasil berhasil disalin! 📋\nBagikan ke temanmu ✨");
+    });
+  };
+
+  // SIMPAN DAN TAMPILKAN HASIL
   function showResult() {
+    if (answers.length < questions.length || answers.includes(undefined)) {
+      alert("Harap jawab semua pertanyaan sebelum melihat hasil.");
+      return;
+    }
+
     let mbti = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 
     answers.forEach((ans, i) => {
-      let scoreType = questions[i].scores[ans];
+      const scoreType = questions[i].scores[ans];
       mbti[scoreType]++;
     });
 
-    let result =
+    const result =
       (mbti["E"] >= mbti["I"] ? "E" : "I") +
       (mbti["S"] >= mbti["N"] ? "S" : "N") +
       (mbti["T"] >= mbti["F"] ? "T" : "F") +
       (mbti["J"] >= mbti["P"] ? "J" : "P");
 
-    quizContainer.innerHTML =
-      mbtiResults[result] || `<p>Hasil tidak ditemukan.</p>`;
+    const mbtiListRef = ref(db, "results/mbti");
+    const newRef = push(mbtiListRef);
+
+    const data = {
+      id: newRef.key,
+      tanggal: new Date().toISOString(),
+      hasil: result,
+      jawaban: questions.reduce((acc, q, idx) => {
+        acc[`q${idx + 1}`] = answers[idx] + 1;
+        return acc;
+      }, {}),
+      totalSkor: mbti,
+    };
+
+    set(newRef, data)
+      .then(() => {
+        console.log("Hasil MBTI berhasil disimpan.");
+        localStorage.setItem("uid", newRef.key);
+        localStorage.setItem("mbtiType", result);
+
+        quizContainer.innerHTML =
+          window.mbtiResults?.[result] || `<p>Hasil tidak ditemukan.</p>`;
+      })
+      .catch((error) => {
+        console.error("Error menyimpan hasil MBTI: ", error);
+        alert("Gagal menyimpan hasil. Coba lagi.");
+      });
+  }
+
+  // CEK PARAMETER URL UNTUK MENAMPILKAN HASIL LANGSUNG
+  const params = new URLSearchParams(window.location.search);
+  const uidParam = params.get("uid");
+  const typeParam = params.get("type");
+
+  if (uidParam && typeParam && window.mbtiResults?.[typeParam]) {
+    document.querySelector(".custom-card").style.display = "none";
+    quizContainer.style.display = "block";
+    quizContainer.innerHTML = window.mbtiResults[typeParam];
+
+    localStorage.setItem("uid", uidParam);
+    localStorage.setItem("mbtiType", typeParam);
   }
 });

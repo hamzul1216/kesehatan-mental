@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="/assets/css/dashboard.css" />
+</head>
+
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li class="active" onclick="switchTest('hipertensi', event)">HIPERTENSI</li>
+                <li onclick="switchTest('mbti', event)">MBTI</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <h1 id="testTitle">Dashboard HIPERTENSI</h1>
+
+            <div class="filters">
+                <label>Dari Tanggal: <input type="date" id="startDate" /></label>
+                <label>Sampai Tanggal: <input type="date" id="endDate" /></label>
+                <button id="filterBtn">Tampilkan</button>
+                <button id="downloadBtn">Download Excel</button>
+            </div>
+
+            <table id="dataTable">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+
+    <!-- Firebase Config -->
+    <script type="module" src="/assets/js/firebase-config.js"></script>
+
+    <!-- Dashboard logic -->
+    <script type="module" src="/assets/js/dashboard.js"></script>
+
+</body>
+
+</html>

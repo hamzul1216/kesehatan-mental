@@ -1,258 +1,165 @@
-window.mbtiResults = {
-  ENFJ: `
+function generateMBTIResult({
+  type,
+  nickname,
+  description,
+  strengths,
+  challenges,
+}) {
+  return `
     <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
+      <h2 class="result-heading">Hasil Tes MBTI Kamu</h2>
       <div class="result-card">
         <div class="info-wrapper">
-          <p class="result-title">ENFJ (The Giver)</p>
+          <p class="result-title">${type} <span class="nickname">(${nickname})</span></p>
           <div class="result-description">
-            <p>Kamu adalah pribadi yang hangat, empatik, dan suka membantu orang lain. Selalu mencari cara untuk memberi dampak positif bagi lingkunganmu.</p>
-            <p><strong>Kelebihan:</strong> Karismatik, suportif, pandai berkomunikasi.</p>
-            <p><strong>Tantangan:</strong> Bisa terlalu fokus pada orang lain hingga lupa diri sendiri.</p>
+            <p class="desc-main">${description}</p>
+            <p><strong>Kelebihan:</strong> ${strengths}</p>
+            <p><strong>Tantangan:</strong> ${challenges}</p>
+          </div>
+          <div class="share">
+            <p>Yuk, Bagikan hasil tesmu!</p>
+            <img class="share-icon" onclick="shareResult()" src="../assets/svg/share.svg" alt="Clipboard" width="24" height="24" />
           </div>
         </div>
+        <button class="card-button" onclick="location.reload()">Coba Lagi</button>
       </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
     </div>
-  `,
-  INFJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">INFJ (The Advocate)</p>
-          <div class="result-description">
-            <p>Kamu seorang visioner idealis dengan intuisi yang tajam dan rasa empati tinggi. Kamu senang membimbing dan memberi makna dalam hidup orang lain.</p>
-            <p><strong>Kelebihan:</strong> Insightful, tekun, peduli sesama.</p>
-            <p><strong>Tantangan:</strong> Cenderung tertutup dan terlalu keras pada diri sendiri.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  INFP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">INFP (The Mediator)</p>
-          <div class="result-description">
-            <p>Kamu adalah seorang pemimpi yang sangat peduli pada nilai dan keadilan. Imajinatif, idealis, dan selalu ingin membuat dunia lebih baik.</p>
-            <p><strong>Kelebihan:</strong> Kreatif, berempati, penuh semangat.</p>
-            <p><strong>Tantangan:</strong> Bisa terlalu perfeksionis dan sulit mengambil keputusan.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ENFP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ENFP (The Campaigner)</p>
-          <div class="result-description">
-            <p>Kamu adalah orang yang ceria, spontan, dan penuh energi. Selalu tertarik pada hal-hal baru dan senang membangun hubungan yang mendalam.</p>
-            <p><strong>Kelebihan:</strong> Penuh semangat, komunikatif, fleksibel.</p>
-            <p><strong>Tantangan:</strong> Sulit fokus dan bisa cepat bosan.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ISTJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ISTJ (The Logistician)</p>
-          <div class="result-description">
-            <p>Kamu orang yang praktis, terstruktur, dan bisa diandalkan. Senang bekerja keras dan menjaga tradisi serta tanggung jawab dengan baik.</p>
-            <p><strong>Kelebihan:</strong> Teliti, tangguh, fokus pada detail.</p>
-            <p><strong>Tantangan:</strong> Kurang fleksibel dan cenderung kaku.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ISFJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ISFJ (The Defender)</p>
-          <div class="result-description">
-            <p>Kamu adalah pelindung yang setia dan penuh perhatian. Seringkali membantu diam-diam tanpa mengharapkan balasan.</p>
-            <p><strong>Kelebihan:</strong> Loyal, penuh empati, sangat bertanggung jawab.</p>
-            <p><strong>Tantangan:</strong> Bisa terlalu mengalah dan menyimpan emosi sendiri.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ESTJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ESTJ (The Executive)</p>
-          <div class="result-description">
-            <p>Kamu adalah pemimpin alami yang suka mengatur dan membuat semuanya berjalan sesuai aturan. Tegas dan logis.</p>
-            <p><strong>Kelebihan:</strong> Tegas, terorganisir, punya jiwa kepemimpinan tinggi.</p>
-            <p><strong>Tantangan:</strong> Bisa keras kepala dan kurang peka.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ESFJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ESFJ (The Consul)</p>
-          <div class="result-description">
-            <p>Kamu suka membuat orang lain merasa nyaman dan dihargai. Selalu siap membantu dan menjaga harmoni dalam lingkungan sekitar.</p>
-            <p><strong>Kelebihan:</strong> Ramah, suportif, penuh perhatian.</p>
-            <p><strong>Tantangan:</strong> Terlalu peduli pada penilaian orang lain.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ISTP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ISTP (The Virtuoso)</p>
-          <div class="result-description">
-            <p>Kamu adalah pemecah masalah sejati yang tenang dan logis. Suka bekerja dengan tangan dan mencoba hal-hal baru dengan cara praktis.</p>
-            <p><strong>Kelebihan:</strong> Analitis, mandiri, adaptif.</p>
-            <p><strong>Tantangan:</strong> Cenderung tertutup dan kurang ekspresif secara emosional.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ISFP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ISFP (The Adventurer)</p>
-          <div class="result-description">
-            <p>Kamu pribadi yang artistik, sensitif, dan spontan. Suka kebebasan dan hidup di saat ini dengan penuh rasa ingin tahu.</p>
-            <p><strong>Kelebihan:</strong> Kreatif, santai, penuh kehangatan.</p>
-            <p><strong>Tantangan:</strong> Sulit merencanakan jangka panjang dan cenderung menghindari konflik.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ESTP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ESTP (The Entrepreneur)</p>
-          <div class="result-description">
-            <p>Kamu adalah pribadi yang berani, energik, dan suka tantangan. Selalu siap menghadapi hal baru dan cepat dalam mengambil keputusan.</p>
-            <p><strong>Kelebihan:</strong> Spontan, berani, penuh energi.</p>
-            <p><strong>Tantangan:</strong> Bisa impulsif dan sulit mengikuti aturan yang ketat.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ESFP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ESFP (The Entertainer)</p>
-          <div class="result-description">
-            <p>Kamu adalah pribadi yang ceria, spontan, dan suka tampil. Selalu membawa keceriaan dalam suasana apapun.</p>
-            <p><strong>Kelebihan:</strong> Ramah, ekspresif, suka bersenang-senang.</p>
-            <p><strong>Tantangan:</strong> Bisa menghindari tanggung jawab dan tidak suka rutinitas.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  INTJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">INTJ (The Architect)</p>
-          <div class="result-description">
-            <p>Kamu adalah pemikir strategis yang penuh visi. Mandiri, logis, dan sangat ambisius dalam mencapai tujuan.</p>
-            <p><strong>Kelebihan:</strong> Visioner, analitis, terorganisir.</p>
-            <p><strong>Tantangan:</strong> Bisa terlihat dingin dan terlalu perfeksionis.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  INTP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">INTP (The Thinker)</p>
-          <div class="result-description">
-            <p>Kamu adalah pencari kebenaran yang senang menganalisis ide dan sistem. Selalu penasaran dan suka menyelidiki sesuatu secara mendalam.</p>
-            <p><strong>Kelebihan:</strong> Logis, kreatif, open-minded.</p>
-            <p><strong>Tantangan:</strong> Bisa terlalu mengabaikan emosi dan kurang praktik.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ENTJ: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ENTJ (The Commander)</p>
-          <div class="result-description">
-            <p>Kamu adalah pemimpin alami yang tegas dan visioner. Selalu punya rencana besar dan siap untuk mengeksekusinya.</p>
-            <p><strong>Kelebihan:</strong> Strategis, ambisius, percaya diri.</p>
-            <p><strong>Tantangan:</strong> Bisa keras kepala dan kurang sensitif terhadap perasaan orang lain.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
-  ENTP: `
-    <div class="result-container fade-in">
-      <h2>Hasil Tes MBTI Kamu</h2>
-      <div class="result-card">
-        <div class="info-wrapper">
-          <p class="result-title">ENTP (The Debater)</p>
-          <div class="result-description">
-            <p>Kamu adalah inovator yang penuh ide dan suka berdiskusi. Antusias, kreatif, dan tidak takut menghadapi tantangan baru.</p>
-            <p><strong>Kelebihan:</strong> Inovatif, komunikatif, fleksibel.</p>
-            <p><strong>Tantangan:</strong> Bisa cepat bosan dan kurang konsisten.</p>
-          </div>
-        </div>
-      </div>
-      <button class="card-button" onclick="location.reload()">Coba Lagi</button>
-    </div>
-  `,
+  `;
+}
+
+const mbtiData = {
+  INTP: {
+    type: "INTP",
+    nickname: "The Thinker",
+    description:
+      "Kamu adalah pencari kebenaran yang senang menganalisis ide dan sistem. Selalu penasaran dan suka menyelidiki sesuatu secara mendalam.",
+    strengths: "Logis, kreatif, open-minded",
+    challenges: "Bisa terlalu mengabaikan emosi dan kurang praktik",
+  },
+  ENTJ: {
+    type: "ENTJ",
+    nickname: "The Commander",
+    description:
+      "Kamu adalah pemimpin alami yang tegas dan visioner. Selalu punya rencana besar dan siap untuk mengeksekusinya.",
+    strengths: "Strategis, ambisius, percaya diri",
+    challenges:
+      "Bisa keras kepala dan kurang sensitif terhadap perasaan orang lain",
+  },
+  ENTP: {
+    type: "ENTP",
+    nickname: "The Debater",
+    description:
+      "Kamu adalah inovator yang penuh ide dan suka berdiskusi. Antusias, kreatif, dan tidak takut menghadapi tantangan baru.",
+    strengths: "Inovatif, komunikatif, fleksibel",
+    challenges: "Bisa cepat bosan dan kurang konsisten",
+  },
+  INTJ: {
+    type: "INTJ",
+    nickname: "The Mastermind",
+    description:
+      "Kamu adalah perencana jangka panjang yang sangat strategis. Mandiri, visioner, dan perfeksionis.",
+    strengths: "Analitis, berwawasan, tegas",
+    challenges: "Cenderung kaku dan kurang emosional",
+  },
+  INFJ: {
+    type: "INFJ",
+    nickname: "The Advocate",
+    description:
+      "Kamu adalah idealis yang memiliki visi kuat tentang dunia yang lebih baik. Sangat peduli dengan orang lain dan memiliki nilai-nilai mendalam.",
+    strengths: "Empatik, intuitif, berprinsip",
+    challenges: "Cenderung menyimpan perasaan dan cepat lelah secara emosional",
+  },
+  INFP: {
+    type: "INFP",
+    nickname: "The Mediator",
+    description:
+      "Kamu adalah pendamai yang menghargai harmoni dan makna dalam hidup. Sangat imajinatif dan sering punya dunia batin yang kaya.",
+    strengths: "Penuh empati, setia, kreatif",
+    challenges: "Terlalu idealis dan mudah kecewa",
+  },
+  ENFP: {
+    type: "ENFP",
+    nickname: "The Campaigner",
+    description:
+      "Kamu adalah sosok yang energik dan inspiratif. Suka eksplorasi ide, orang, dan kemungkinan baru.",
+    strengths: "Antusias, ekspresif, peduli",
+    challenges: "Susah fokus dan bisa terlalu impulsif",
+  },
+  ENFJ: {
+    type: "ENFJ",
+    nickname: "The Protagonist",
+    description:
+      "Kamu adalah pemimpin yang hangat dan karismatik. Pandai memotivasi orang dan sering jadi panutan.",
+    strengths: "Meyakinkan, empatik, suportif",
+    challenges: "Terlalu perfeksionis dan suka menyenangkan semua orang",
+  },
+  ISTJ: {
+    type: "ISTJ",
+    nickname: "The Inspector",
+    description:
+      "Kamu adalah pribadi yang bertanggung jawab dan sangat menghargai tradisi dan struktur.",
+    strengths: "Terorganisir, disiplin, andal",
+    challenges: "Kurang fleksibel dan bisa terlalu kritis",
+  },
+  ISFJ: {
+    type: "ISFJ",
+    nickname: "The Defender",
+    description:
+      "Kamu adalah pelindung yang tenang dan penuh perhatian. Selalu siap membantu dengan tulus.",
+    strengths: "Setia, perhatian, teliti",
+    challenges: "Sering mengorbankan diri dan susah bilang tidak",
+  },
+  ISTP: {
+    type: "ISTP",
+    nickname: "The Virtuoso",
+    description:
+      "Kamu adalah pemecah masalah yang suka eksperimen. Praktis, mandiri, dan suka kebebasan.",
+    strengths: "Analitis, tenang, fleksibel",
+    challenges: "Kurang ekspresif dan bisa cenderung impulsif",
+  },
+  ISFP: {
+    type: "ISFP",
+    nickname: "The Adventurer",
+    description:
+      "Kamu adalah jiwa bebas yang menghargai estetika dan pengalaman pribadi. Lembut tapi punya pendirian sendiri.",
+    strengths: "Sensitif, artistik, penuh kasih",
+    challenges: "Cenderung tertutup dan menghindari konflik",
+  },
+  ESTP: {
+    type: "ESTP",
+    nickname: "The Entrepreneur",
+    description:
+      "Kamu suka hidup di momen sekarang dan penuh aksi. Cepat berpikir dan pandai beradaptasi.",
+    strengths: "Spontan, berani, pragmatis",
+    challenges: "Kurang suka rutinitas dan suka ambil risiko",
+  },
+  ESFP: {
+    type: "ESFP",
+    nickname: "The Entertainer",
+    description:
+      "Kamu adalah jiwa sosial yang suka membuat orang lain tertawa dan merasa nyaman. Hidup penuh warna dan energi.",
+    strengths: "Ramah, optimis, penuh semangat",
+    challenges: "Susah fokus dan cenderung impulsif",
+  },
+  ESTJ: {
+    type: "ESTJ",
+    nickname: "The Executive",
+    description:
+      "Kamu suka memimpin dan menegakkan aturan. Praktis dan suka ketertiban.",
+    strengths: "Tegas, tangguh, efisien",
+    challenges: "Keras kepala dan kurang empati",
+  },
+  ESFJ: {
+    type: "ESFJ",
+    nickname: "The Consul",
+    description:
+      "Kamu adalah penjaga harmoni yang suka merawat orang lain. Sering jadi perekat dalam kelompok.",
+    strengths: "Peduli, setia, bertanggung jawab",
+    challenges: "Terlalu bergantung pada opini orang lain",
+  },
 };
+
+window.mbtiResults = {};
+for (const [key, value] of Object.entries(mbtiData)) {
+  window.mbtiResults[key] = generateMBTIResult(value);
+}
