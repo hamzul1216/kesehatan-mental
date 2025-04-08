@@ -165,9 +165,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const mbtiListRef = ref(db, "results/mbti");
     const newRef = push(mbtiListRef);
 
+    const tanggalSekarang = new Date().toLocaleString("sv-SE", {
+      timeZone: "Asia/Jakarta",
+    });
+    // Format: "2025-04-08 13:09:56" (lebih rapi buat di database juga)
+
     const data = {
       id: newRef.key,
-      tanggal: new Date().toISOString(),
+      tanggal: tanggalSekarang,
       hasil: result,
       jawaban: questions.reduce((acc, q, idx) => {
         acc[`q${idx + 1}`] = answers[idx] + 1;
