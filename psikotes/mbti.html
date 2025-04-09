@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kesehatan Mental</title>
 
+    <!-- favicon -->
+    <link rel="icon" href="/assets/img/kemenkes-logo.png" type="image/png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,8 +54,9 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding-top: 5rem;
-            padding-bottom: 10rem;
+            padding: 2rem 3rem 4rem;
+            border-radius: var(--borderRadius);
+            box-shadow: var(--boxShadow);
         }
 
         /* Footer tetap di bawah */
@@ -111,7 +115,7 @@
             background: white;
             padding: 1.5rem;
             border-radius: var(--borderRadius);
-            margin-top: 2rem;
+            margin: 2rem 0;
             text-align: left;
             font-size: 1rem;
             color: var(--secondaryTextColor);
@@ -133,11 +137,44 @@
             margin-bottom: 0.5rem;
         }
 
+        /* header logo */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .card-logos {
+            display: flex;
+            gap: 0.5rem;
+            justify-self: end;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+
+        /* footer politeknik */
+        .footer-politeknik {
+            margin-top: 5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .footer-politeknik p {
+            color: black;
+        }
+
         /* Progress bar */
         .progress-container {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-top: 5rem;
             margin-bottom: 15px;
         }
 
@@ -340,6 +377,12 @@
     <section id="mbti">
         <div class="mbti main-container">
             <div class="custom-card">
+                <div class="card-grid">
+                    <div class="card-logos">
+                        <img src="/assets/img/kemenkes-logo.png" alt="Logo 1" class="logo">
+                        <img src="/assets/img/Desain-tanpa-judul-1.png" alt="Logo 2" class="logo">
+                    </div>
+                </div>
                 <h3 class="card-title">Tes Kepribadian MBTI Bahasa Indonesia: Kenali Dirimu!</h3>
                 <p class="card-description">
                     Tes MBTI ini bertujuan untuk membantu kamu mengenali salah satu dari 16 tipe kepribadian MBTI.
@@ -357,9 +400,20 @@
                     </ul>
                     <p><strong>Selamat mengisi, ya! :)</strong></p>
                 </div>
+                <div class="footer-politeknik">
+                    <p>Politeknik Kesehatan Kementrian Kesehatan</p>
+                    <p>Profesi Ners 2025</p>
+                    <p>Kelompok 3 Reguler 2</p>
+                </div>
             </div>
 
             <div id="quiz-container" style="display: none;">
+                <div class="card-grid">
+                    <div class="card-logos">
+                        <img src="/assets/img/kemenkes-logo.png" alt="Logo 1" class="logo">
+                        <img src="/assets/img/Desain-tanpa-judul-1.png" alt="Logo 2" class="logo">
+                    </div>
+                </div>
                 <div class="progress-container">
                     <p id="progress-text">Pertanyaan ke 1/5</p>
                     <div class="progress-bar">
@@ -374,6 +428,11 @@
                 <div class="navigation">
                     <button id="prev-btn" class="nav-button"><i data-feather="arrow-left-circle"></i></button>
                     <button id="next-btn" class="nav-button"><i data-feather="arrow-right-circle"></i></button>
+                </div>
+                <div class="footer-politeknik">
+                    <p>Politeknik Kesehatan Kementrian Kesehatan</p>
+                    <p>Profesi Ners 2025</p>
+                    <p>Kelompok 3 Reguler 2</p>
                 </div>
             </div>
         </div>
@@ -392,7 +451,7 @@
             <div class="footer-center">
                 <ul>
                     <li><a href="#">Tentang</a></li>
-                    <li><a href="#">Kontak</a></li>
+                    <li><a href="#contact">Kontak</a></li>
                     <li><a href="#">Kebijakan Privasi</a></li>
                 </ul>
             </div>

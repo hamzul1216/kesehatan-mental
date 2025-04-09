@@ -15,6 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevButton = document.getElementById("prev-btn");
   const nextButton = document.getElementById("next-btn");
 
+  // Cek apakah user datang dari halaman lain
+  const isComingFromOtherPage =
+    !document.referrer.includes(window.location.hostname) ||
+    (document.referrer && !document.referrer.includes("mbti.html"));
+
   let userId = localStorage.getItem("userId");
   if (!userId) {
     userId = uuid.v4();
@@ -58,9 +63,66 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
+  // Fungsi untuk menyimpan state quiz
+  function saveQuizState() {
+    const state = {
+      currentQuestionIndex,
+      answers,
+      quizStarted:
+        document.querySelector(".custom-card").style.display === "none",
+    };
+    sessionStorage.setItem("mbtiQuizState", JSON.stringify(state));
+  }
+
+  // Fungsi untuk memuat state quiz
+  function loadQuizState() {
+    // Reset jika datang dari halaman lain
+    if (isComingFromOtherPage && !sessionStorage.getItem("mbtiInternalNav")) {
+      sessionStorage.removeItem("mbtiQuizState");
+      return;
+    }
+
+    const savedState = sessionStorage.getItem("mbtiQuizState");
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      currentQuestionIndex = state.currentQuestionIndex || 0;
+      answers = state.answers || [];
+
+      if (state.quizStarted) {
+        document.querySelector(".custom-card").style.display = "none";
+        quizContainer.style.display = "block";
+        loadQuestion();
+      }
+    }
+  }
+
+  // Deteksi jika halaman dimuat dari cache (back/forward navigation)
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+      // Hapus state jika kembali ke halaman melalui navigasi browser
+      sessionStorage.removeItem("mbtiQuizState");
+      resetQuiz();
+    }
+  });
+
+  // Reset quiz ke keadaan awal
+  function resetQuiz() {
+    currentQuestionIndex = 0;
+    answers = [];
+    document.querySelector(".custom-card").style.display = "flex";
+    quizContainer.style.display = "none";
+    sessionStorage.removeItem("mbtiQuizState");
+  }
+
+  // Panggil loadQuizState saat halaman dimuat
+  loadQuizState();
+
   startButton.addEventListener("click", () => {
     document.querySelector(".custom-card").style.display = "none";
     quizContainer.style.display = "block";
+    // Set flag bahwa user datang dari dalam halaman ini
+    sessionStorage.setItem("mbtiInternalNav", "true");
+    saveQuizState();
     loadQuestion();
   });
 
@@ -96,11 +158,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function selectAnswer(index) {
     answers[currentQuestionIndex] = index;
+    saveQuizState();
     loadQuestion();
 
     setTimeout(() => {
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
+        saveQuizState();
         loadQuestion();
       } else {
         showResult();
@@ -111,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
   prevButton.addEventListener("click", () => {
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
+      saveQuizState();
       loadQuestion();
     }
   });
@@ -118,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
   nextButton.addEventListener("click", () => {
     if (currentQuestionIndex < questions.length - 1) {
       currentQuestionIndex++;
+      saveQuizState();
       loadQuestion();
     } else {
       showResult();
@@ -140,7 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const shareURL = `${window.location.origin}/psikotes/mbti.html?uid=${uid}&type=${mbti}`;
+    const shareURL = `${window.location.origin}/psiko
+    /mbti.html?uid=${uid}&type=${mbti}`;
     navigator.clipboard.writeText(shareURL).then(() => {
       Toastify({
         text: "Link hasil berhasil disalin! 📋 Bagikan ke temanmu ✨",
@@ -201,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Hasil MBTI berhasil disimpan.");
         localStorage.setItem("uid", newRef.key);
         localStorage.setItem("mbtiType", result);
-
+        sessionStorage.removeItem("mbtiQuizState");
         quizContainer.innerHTML =
           window.mbtiResults?.[result] || `<p>Hasil tidak ditemukan.</p>`;
       })
@@ -226,8 +293,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".custom-card").style.display = "none";
     quizContainer.style.display = "block";
     quizContainer.innerHTML = window.mbtiResults[typeParam];
-
+    sessionStorage.removeItem("mbtiQuizState");
     localStorage.setItem("uid", uidParam);
     localStorage.setItem("mbtiType", typeParam);
   }
+
+  window.addEventListener("load", function () {
+    sessionStorage.removeItem("mbtiInternalNav");
+  });
 });
