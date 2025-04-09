@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesehatan Mental</title>
+
+    <!-- favicon -->
+    <link rel="icon" href="/assets/img/kemenkes-logo.png" type="image/png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,700&display=swap"
+        rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- My Style -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* Pastikan body memenuhi tinggi viewport */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Struktur utama agar footer selalu di bawah */
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Bagian konten utama harus fleksibel */
+        #hipertensi {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12rem 2rem 4rem;
+        }
+
+        /* Kontainer kuis agar selalu mengisi ruang tersisa */
+        #quiz-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 3rem 4rem;
+            border-radius: var(--borderRadius);
+            box-shadow: var(--boxShadow);
+        }
+
+        /* Footer tetap di bawah */
+        footer {
+            margin-top: auto;
+        }
+
+        /* Maksimalkan lebar kontainer supaya proporsional */
+        .main-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* Styling card utama */
+        .custom-card {
+            background: var(--thirdBackgroundColor);
+            border-radius: var(--borderRadius);
+            box-shadow: var(--boxShadow);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Judul */
+        .card-title {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            color: var(--primaryTextColor);
+        }
+
+        /* Deskripsi */
+        .card-description {
+            font-size: 1.1rem;
+            color: var(--secondaryTextColor);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tombol Mulai */
+        .card-button {
+            background: var(--primaryButtonColor);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .card-button:hover {
+            background: var(--primaryButtonHover);
+        }
+
+        /* Panduan */
+        .card-guide {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--borderRadius);
+            margin: 2rem 0;
+            text-align: left;
+            font-size: 1rem;
+            color: var(--secondaryTextColor);
+            box-shadow: var(--boxShadow);
+        }
+
+        .card-guide p {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-guide ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-guide li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* header logo */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .card-logos {
+            display: flex;
+            gap: 0.5rem;
+            justify-self: end;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+
+        /* footer politeknik */
+        .footer-politeknik {
+            margin-top: 5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .footer-politeknik p {
+            color: black;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5rem;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 5px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #4caf50;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Soal */
+        #question-text {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Opsi Jawaban */
+        #answer-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .answer-btn {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+            font-weight: bold;
+        }
+
+        .answer-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .answer-btn.selected {
+            background: #4caf50;
+            color: white;
+        }
+
+        /* Navigasi */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .result-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .result-heading {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primaryTextColor);
+        }
+
+        .result-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--boxShadow);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .result-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--primaryButtonColor);
+            margin-bottom: 1rem;
+        }
+
+        .result-title .nickname {
+            font-weight: normal;
+            color: var(--secondaryTextColor);
+        }
+
+        .result-description {
+            font-size: 1rem;
+            color: var(--secondaryTextColor);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .desc-main {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--primaryTextColor);
+        }
+
+        .share {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.8rem 1rem;
+        }
+
+        .share-icon {
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .share-icon:hover {
+            transform: scale(1.15);
+            opacity: 0.8;
+        }
+
+        .video-wrapper {
+            margin-top: 1rem;
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        /* Tambahan untuk efek transisi antar pertanyaan */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive tweak */
+        @media (max-width: 768px) {
+            #hipertensi {
+                padding: 10rem 1rem 4rem;
+            }
+
+            .custom-card {
+                padding: 1.5rem;
+            }
+
+            .answer-btn {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <!-- Navbar Start -->
+    <nav class="navbar">
+        <a href="../index.html" class="navbar-logo">Kesehatan<span> Mental</span></a>
+
+        <div class="navbar-nav">
+            <a href="../index.html">Home</a>
+            <a href="../index.html#service">Layanan</a>
+            <a href="../index.html#psikotes">Psikotes</a>
+            <a href="../index.html#blog">Blog</a>
+            <a href="../index.html#contact">Kontak</a>
+        </div>
+
+        <div class="navbar-extra">
+            <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Main Start-->
+    <section id="hipertensi">
+        <div class="hipertensi main-container">
+            <div class="custom-card">
+                <div class="card-grid">
+                    <div class="card-logos">
+                        <img src="/assets/img/kemenkes-logo.png" alt="Logo 1" class="logo">
+                        <img src="/assets/img/Desain-tanpa-judul-1.png" alt="Logo 2" class="logo">
+                    </div>
+                </div>
+                <h3 class="card-title">Skrining Hipertensi</h3>
+                <p class="card-description">
+                    Skrining ini bertujuan untuk mendeteksi risiko hipertensi secara dini. Dengan mengenali
+                    faktor-faktor risikonya, kamu bisa mulai menjaga kesehatan jantung dan pembuluh darahmu.
+                </p>
+                <button class="card-button">Mulai</button>
+                <div class="card-guide">
+                    <p><strong>Baca panduan pengisiannya, yuk!</strong></p>
+                    <ul>
+                        <li>Gak ada jawaban yang benar atau salah. Isilah dengan jujur sesuai kepribadianmu.</li>
+                        <li>Santai aja, tes ini gak diberi waktu, kok.</li>
+                        <li>Cari tempat yang nyaman dan kondusif supaya kamu lebih fokus.</li>
+                        <li>Jika kamu keluar di tengah tes, maka seluruh proses tes dan jawaban akan hilang.</li>
+                        <li>Hasil tes bisa kamu dapatkan setelah mengisi semua pertanyaan dengan lengkap.</li>
+                    </ul>
+                    <p><strong>Selamat mengisi, ya! :)</strong></p>
+                </div>
+                <div class="footer-politeknik">
+                    <p>Politeknik Kesehatan Kementrian Kesehatan</p>
+                    <p>Profesi Ners 2025</p>
+                    <p>Kelompok 3 Reguler 2</p>
+                </div>
+            </div>
+
+            <div id="quiz-container" style="display: none;">
+                <div class="card-grid">
+                    <div class="card-logos">
+                        <img src="/assets/img/kemenkes-logo.png" alt="Logo 1" class="logo">
+                        <img src="/assets/img/Desain-tanpa-judul-1.png" alt="Logo 2" class="logo">
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <p id="progress-text">Pertanyaan ke 1/10</p>
+                    <div class="progress-bar">
+                        <div id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <h3 id="question-text">Pertanyaan akan muncul di sini</h3>
+
+                <div id="answer-buttons"></div>
+
+                <div class="navigation">
+                    <button id="prev-btn" class="nav-button"><i data-feather="arrow-left-circle"></i></button>
+                    <button id="next-btn" class="nav-button"><i data-feather="arrow-right-circle"></i></button>
+                </div>
+                <div class="footer-politeknik">
+                    <p>Politeknik Kesehatan Kementrian Kesehatan</p>
+                    <p>Profesi Ners 2025</p>
+                    <p>Kelompok 3 Reguler 2</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Main End -->
+
+    <!-- Footer Section Start-->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <h3>Kesehatan Mental</h3>
+                <p>&copy; 2025 Kesehatan Mental. All rights reserved.</p>
+                <p class="portofolio">Website ini dibuat oleh | <a href="https://hamzahsite.netlify.app/"
+                        target="_blank">Hamzah Hasan</a></p>
+            </div>
+            <div class="footer-center">
+                <ul>
+                    <li><a href="#">Tentang</a></li>
+                    <li><a href="#contact">Kontak</a></li>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                <p>Ikuti Kami:</p>
+                <div class="social-icons">
+                    <a href="#"><i data-feather="facebook"></i></a>
+                    <a href="#"><i data-feather="twitter"></i></a>
+                    <a href="#"><i data-feather="instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End-->
+
+
+    <!-- Feather Icons -->
+    <script>
+        feather.replace();
+    </script>
+
+    <!-- taostify -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!-- UUID -->
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+    <!-- Firebase Config -->
+    <script type="module" src="../assets/js/firebase-config.js"></script>
+
+    <!-- My Javascript -->
+    <script type="module" src="../assets/js/hipertensiResult.js"></script>
+    <script type="module" src="../assets/js/script.js"></script>
+    <script type="module" src="../assets/js/hipertensi.js"></script>
+</body>
+
+</html>
