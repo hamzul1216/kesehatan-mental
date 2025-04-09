@@ -1,3 +1,10 @@
+import { db } from "./firebase-config.js";
+import {
+  ref,
+  set,
+  push,
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const startButton = document.querySelector(".card-button");
   const quizContainer = document.getElementById("quiz-container");
@@ -7,6 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressFill = document.getElementById("progress-fill");
   const prevButton = document.getElementById("prev-btn");
   const nextButton = document.getElementById("next-btn");
+
+  // Cek apakah user datang dari halaman lain
+  const isComingFromOtherPage =
+    !document.referrer.includes(window.location.hostname) ||
+    (document.referrer && !document.referrer.includes("mbti.html"));
+
+  let userId = localStorage.getItem("userId");
+  if (!userId) {
+    userId = uuid.v4();
+    localStorage.setItem("userId", userId);
+  }
 
   let currentQuestionIndex = 0;
   let answers = [];
@@ -45,9 +63,66 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   ];
 
+  // Fungsi untuk menyimpan state quiz
+  function saveQuizState() {
+    const state = {
+      currentQuestionIndex,
+      answers,
+      quizStarted:
+        document.querySelector(".custom-card").style.display === "none",
+    };
+    sessionStorage.setItem("mbtiQuizState", JSON.stringify(state));
+  }
+
+  // Fungsi untuk memuat state quiz
+  function loadQuizState() {
+    // Reset jika datang dari halaman lain
+    if (isComingFromOtherPage && !sessionStorage.getItem("mbtiInternalNav")) {
+      sessionStorage.removeItem("mbtiQuizState");
+      return;
+    }
+
+    const savedState = sessionStorage.getItem("mbtiQuizState");
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      currentQuestionIndex = state.currentQuestionIndex || 0;
+      answers = state.answers || [];
+
+      if (state.quizStarted) {
+        document.querySelector(".custom-card").style.display = "none";
+        quizContainer.style.display = "block";
+        loadQuestion();
+      }
+    }
+  }
+
+  // Deteksi jika halaman dimuat dari cache (back/forward navigation)
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+      // Hapus state jika kembali ke halaman melalui navigasi browser
+      sessionStorage.removeItem("mbtiQuizState");
+      resetQuiz();
+    }
+  });
+
+  // Reset quiz ke keadaan awal
+  function resetQuiz() {
+    currentQuestionIndex = 0;
+    answers = [];
+    document.querySelector(".custom-card").style.display = "flex";
+    quizContainer.style.display = "none";
+    sessionStorage.removeItem("mbtiQuizState");
+  }
+
+  // Panggil loadQuizState saat halaman dimuat
+  loadQuizState();
+
   startButton.addEventListener("click", () => {
     document.querySelector(".custom-card").style.display = "none";
     quizContainer.style.display = "block";
+    // Set flag bahwa user datang dari dalam halaman ini
+    sessionStorage.setItem("mbtiInternalNav", "true");
+    saveQuizState();
     loadQuestion();
   });
 
@@ -55,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const q = questions[currentQuestionIndex];
     questionText.innerText = q.question;
     answerButtons.innerHTML = "";
-    quizContainer.classList.add("fade-in"); // Tambah efek fade-in
+    quizContainer.classList.add("fade-in");
 
     q.options.forEach((option, index) => {
       const btn = document.createElement("div");
@@ -63,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerText = option;
 
       if (answers[currentQuestionIndex] === index) {
-        btn.classList.add("selected"); // Highlight jawaban yang dipilih
+        btn.classList.add("selected");
       }
 
       btn.addEventListener("click", () => selectAnswer(index));
@@ -83,10 +158,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function selectAnswer(index) {
     answers[currentQuestionIndex] = index;
+    saveQuizState();
     loadQuestion();
+
     setTimeout(() => {
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
+        saveQuizState();
         loadQuestion();
       } else {
         showResult();
@@ -97,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
   prevButton.addEventListener("click", () => {
     if (currentQuestionIndex > 0) {
       currentQuestionIndex--;
+      saveQuizState();
       loadQuestion();
     }
   });
@@ -104,27 +183,122 @@ document.addEventListener("DOMContentLoaded", () => {
   nextButton.addEventListener("click", () => {
     if (currentQuestionIndex < questions.length - 1) {
       currentQuestionIndex++;
+      saveQuizState();
       loadQuestion();
     } else {
       showResult();
     }
   });
 
+  // SHARE RESULT with Toastify
+  window.shareResult = function () {
+    const uid = localStorage.getItem("uid");
+    const mbti = localStorage.getItem("mbtiType");
+
+    if (!uid || !mbti) {
+      Toastify({
+        text: "Hasil tidak tersedia untuk dibagikan.",
+        backgroundColor: "#f44336",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
+      return;
+    }
+
+    const shareURL = `${window.location.origin}/psiko
+    /mbti.html?uid=${uid}&type=${mbti}`;
+    navigator.clipboard.writeText(shareURL).then(() => {
+      Toastify({
+        text: "Link hasil berhasil disalin! 📋 Bagikan ke temanmu ✨",
+        backgroundColor: "#ffb870",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
+    });
+  };
+
+  // SIMPAN DAN TAMPILKAN HASIL
   function showResult() {
+    if (answers.length < questions.length || answers.includes(undefined)) {
+      Toastify({
+        text: "Harap jawab semua pertanyaan sebelum melihat hasil.",
+        backgroundColor: "#f44336",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
+      return;
+    }
+
     let mbti = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 
     answers.forEach((ans, i) => {
-      let scoreType = questions[i].scores[ans];
+      const scoreType = questions[i].scores[ans];
       mbti[scoreType]++;
     });
 
-    let result =
+    const result =
       (mbti["E"] >= mbti["I"] ? "E" : "I") +
       (mbti["S"] >= mbti["N"] ? "S" : "N") +
       (mbti["T"] >= mbti["F"] ? "T" : "F") +
       (mbti["J"] >= mbti["P"] ? "J" : "P");
 
-    quizContainer.innerHTML =
-      mbtiResults[result] || `<p>Hasil tidak ditemukan.</p>`;
+    const mbtiListRef = ref(db, "results/mbti");
+    const newRef = push(mbtiListRef);
+
+    const tanggalSekarang = new Date().toLocaleString("sv-SE", {
+      timeZone: "Asia/Jakarta",
+    });
+
+    const data = {
+      id: newRef.key,
+      tanggal: tanggalSekarang,
+      hasil: result,
+      jawaban: questions.reduce((acc, q, idx) => {
+        acc[`q${idx + 1}`] = answers[idx] + 1;
+        return acc;
+      }, {}),
+      totalSkor: mbti,
+    };
+
+    set(newRef, data)
+      .then(() => {
+        console.log("Hasil MBTI berhasil disimpan.");
+        localStorage.setItem("uid", newRef.key);
+        localStorage.setItem("mbtiType", result);
+        sessionStorage.removeItem("mbtiQuizState");
+        quizContainer.innerHTML =
+          window.mbtiResults?.[result] || `<p>Hasil tidak ditemukan.</p>`;
+      })
+      .catch((error) => {
+        console.error("Error menyimpan hasil MBTI: ", error);
+        Toastify({
+          text: "Gagal menyimpan hasil. Coba lagi.",
+          backgroundColor: "#f44336",
+          duration: 3000,
+          gravity: "top",
+          position: "center",
+        }).showToast();
+      });
   }
+
+  // CEK PARAMETER URL UNTUK MENAMPILKAN HASIL LANGSUNG
+  const params = new URLSearchParams(window.location.search);
+  const uidParam = params.get("uid");
+  const typeParam = params.get("type");
+
+  if (uidParam && typeParam && window.mbtiResults?.[typeParam]) {
+    document.querySelector(".custom-card").style.display = "none";
+    quizContainer.style.display = "block";
+    quizContainer.innerHTML = window.mbtiResults[typeParam];
+    sessionStorage.removeItem("mbtiQuizState");
+    localStorage.setItem("uid", uidParam);
+    localStorage.setItem("mbtiType", typeParam);
+  }
+
+  window.addEventListener("load", function () {
+    sessionStorage.removeItem("mbtiInternalNav");
+  });
 });
