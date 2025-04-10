@@ -8,7 +8,7 @@ body {
   display: flex;
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden; /* Prevent dashboard from expanding */
+  overflow-x: hidden;
 }
 
 .mobile-menu-btn {
@@ -135,17 +135,27 @@ body {
 
 .table-container {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 250px);
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
+  position: relative;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   min-width: 600px;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #f2f2f2;
 }
 
 th,
@@ -157,9 +167,9 @@ td {
 }
 
 th {
-  background-color: #f2f2f2;
   position: sticky;
   top: 0;
+  background-color: #f2f2f2;
 }
 
 /* Responsive Styles */
@@ -196,6 +206,10 @@ th {
   .filters button {
     max-width: 100%;
     width: 100%;
+  }
+
+  .table-container {
+    max-height: calc(100vh - 300px);
   }
 }
 
@@ -251,5 +265,6 @@ th {
 
   .table-container {
     overflow-x: visible;
+    max-height: none;
   }
 }
