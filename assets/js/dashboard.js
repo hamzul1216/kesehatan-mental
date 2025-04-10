@@ -72,7 +72,6 @@ function getOrderedSoalKeys(jawabanObj) {
   });
 }
 
-// Parsing waktu Asia/Jakarta dari string format "YYYY-MM-DD HH:mm:ss"
 function parseJakartaDate(str) {
   const [datePart, timePart] = str.split(" ");
   const [year, month, day] = datePart.split("-").map(Number);
@@ -99,19 +98,30 @@ function renderTable(data) {
       ...Object.keys(data[0].totalSkor || {}),
     ];
   } else {
-    allKeys = ["id", "tanggal", "hasil"];
+    // Urutan kolom untuk hipertensi: id, tanggal, nama, usia, jenis kelamin, hasil, Q1-Q10
+    allKeys = ["id", "tanggal", "nama", "usia", "jenisKelamin", "hasil"];
     const soalKeys = getOrderedSoalKeys(data[0].jawaban);
     allKeys.push(...soalKeys);
   }
 
   const headerRow = document.createElement("tr");
   headerRow.innerHTML =
-    `<th>No</th>` + allKeys.map((key) => `<th>${key}</th>`).join("");
+    `<th>No</th>` +
+    allKeys
+      .map((key) => {
+        // Ubah label untuk beberapa kolom
+        if (key === "jenisKelamin") return `<th>Jenis Kelamin</th>`;
+        if (key === "nama") return `<th>Nama</th>`;
+        if (key === "usia") return `<th>Usia</th>`;
+        return `<th>${key}</th>`;
+      })
+      .join("");
   tableHead.appendChild(headerRow);
 
   data.forEach((item, index) => {
     const row = document.createElement("tr");
     let rowHTML = `<td>${index + 1}</td>`;
+
     rowHTML += allKeys
       .map((key) => {
         if (currentTest === "hipertensi" && item.jawaban?.[key] !== undefined)
@@ -123,6 +133,7 @@ function renderTable(data) {
         return `<td>${item[key] ?? ""}</td>`;
       })
       .join("");
+
     row.innerHTML = rowHTML;
     tableBody.appendChild(row);
   });
@@ -172,7 +183,8 @@ function downloadExcel() {
       ...Object.keys(filtered[0].totalSkor || {}),
     ];
   } else {
-    allKeys = ["id", "tanggal", "hasil"];
+    // Urutan kolom untuk Excel sama dengan tampilan tabel
+    allKeys = ["id", "tanggal", "nama", "usia", "jenisKelamin", "hasil"];
     const soalKeys = getOrderedSoalKeys(filtered[0].jawaban);
     allKeys.push(...soalKeys);
   }
