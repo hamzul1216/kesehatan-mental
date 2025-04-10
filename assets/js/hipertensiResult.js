@@ -49,8 +49,9 @@ const hipertensiData = {
     tips: "Pencegahan dan penanganan Tekanan Darah Tinggi dapat dilihat di bawah ini:",
     videos: [
       "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
       "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
-      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
     ],
   },
   negative: {
@@ -60,8 +61,9 @@ const hipertensiData = {
     tips: "Pencegahan dan penanganan Tekanan Darah Tinggi dapat dilihat di bawah ini:",
     videos: [
       "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
       "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
-      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
     ],
   },
 };

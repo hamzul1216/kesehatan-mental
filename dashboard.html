@@ -5,15 +5,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard Admin</title>
-
-    <!-- favicon -->
     <link rel="icon" href="/assets/img/dashboard.png" type="image/png">
-
     <link rel="stylesheet" href="/assets/css/dashboard.css" />
+    <!-- Font Awesome for mobile menu icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <div class="dashboard">
+        <!-- Mobile Menu Button -->
+        <div class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+
         <aside class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
@@ -26,31 +30,38 @@
             <h1 id="testTitle">Dashboard HIPERTENSI</h1>
 
             <div class="filters">
-                <label>Dari Tanggal: <input type="date" id="startDate" /></label>
-                <label>Sampai Tanggal: <input type="date" id="endDate" /></label>
-                <button id="filterBtn">Tampilkan</button>
-                <button id="downloadBtn">Download Excel</button>
+                <div class="filter-group">
+                    <label>Dari Tanggal: <input type="date" id="startDate" /></label>
+                    <label>Sampai Tanggal: <input type="date" id="endDate" /></label>
+                </div>
+                <div class="button-group">
+                    <button id="filterBtn">Tampilkan</button>
+                    <button id="downloadBtn">Download Excel</button>
+                </div>
             </div>
 
-            <table id="dataTable">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-container">
+                <table id="dataTable">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </main>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-    <!-- Firebase SDK -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-
-    <!-- Firebase Config -->
     <script type="module" src="/assets/js/firebase-config.js"></script>
-
-    <!-- Dashboard logic -->
     <script type="module" src="/assets/js/dashboard.js"></script>
 
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+    </script>
 </body>
 
 </html>
