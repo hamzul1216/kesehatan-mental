@@ -58,8 +58,8 @@ const hipertensiData = {
     videos: [
       "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
       "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
-      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
-      "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
+      "https://youtube.com/embed/LYmKIx6txpk?si=UHPEL2XDfRhzoLVT",
+      "https://www.youtube.com/embed/OUu99HDBYjM?si=i3AZCZ99ILJiYrG2",
     ],
   },
   negative: {
@@ -70,8 +70,8 @@ const hipertensiData = {
     videos: [
       "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
       "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
-      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
-      "https://www.youtube.com/embed/xPjrZYSg1Ec?si=IObpvlPtFQktk1pq",
+      "https://youtube.com/embed/LYmKIx6txpk?si=UHPEL2XDfRhzoLVT",
+      "https://www.youtube.com/embed/OUu99HDBYjM?si=i3AZCZ99ILJiYrG2",
     ],
   },
 };
