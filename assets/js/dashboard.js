@@ -12,17 +12,13 @@ let currentTest = "hipertensi";
 const tableBody = document.querySelector("#dataTable tbody");
 const tableHead = document.querySelector("#dataTable thead");
 
-// Ambil elemen tombol
 document.getElementById("filterBtn").addEventListener("click", filterData);
 document.getElementById("downloadBtn").addEventListener("click", downloadExcel);
-
-// Expose fungsi ke global scope
 window.switchTest = switchTest;
 
 fetchData();
 
 function fetchData() {
-  // Ambil data MBTI
   const mbtiRef = ref(db, "results/mbti");
   get(mbtiRef)
     .then((snapshot) => {
@@ -36,7 +32,6 @@ function fetchData() {
     })
     .catch((error) => console.error("Error mengambil data MBTI: ", error));
 
-  // Ambil data HIPERTENSI
   const hipertensiRef = ref(db, "results/hipertensi");
   get(hipertensiRef)
     .then((snapshot) => {
@@ -55,12 +50,10 @@ function fetchData() {
 
 function switchTest(test, event) {
   currentTest = test;
-
   document
     .querySelectorAll(".sidebar li")
     .forEach((li) => li.classList.remove("active"));
   event.target.classList.add("active");
-
   document.getElementById(
     "testTitle"
   ).innerText = `Dashboard ${test.toUpperCase()}`;
@@ -71,12 +64,27 @@ function getCurrentData() {
   return currentTest === "mbti" ? dataMBTI : dataHipertensi;
 }
 
+function getOrderedSoalKeys(jawabanObj) {
+  return Object.keys(jawabanObj || {}).sort((a, b) => {
+    const numA = parseInt(a.replace(/\D/g, ""), 10);
+    const numB = parseInt(b.replace(/\D/g, ""), 10);
+    return numA - numB;
+  });
+}
+
+// Parsing waktu Asia/Jakarta dari string format "YYYY-MM-DD HH:mm:ss"
+function parseJakartaDate(str) {
+  const [datePart, timePart] = str.split(" ");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+  return new Date(year, month - 1, day, hour, minute, second);
+}
+
 function renderTable(data) {
   tableBody.innerHTML = "";
   tableHead.innerHTML = "";
   if (data.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="100%" style="text-align:center; padding: 1rem; font-style: italic; color: gray;">Data kosong</td></tr>`;
-    tableHead.innerHTML = "";
     return;
   }
 
@@ -87,33 +95,27 @@ function renderTable(data) {
       "id",
       "tanggal",
       "hasil",
-      ...Object.keys(data[0].jawaban || {}),
+      ...getOrderedSoalKeys(data[0].jawaban),
       ...Object.keys(data[0].totalSkor || {}),
     ];
   } else {
-    const baseKeys = Object.keys(data[0]).filter((key) => key !== "totalSkor");
-    baseKeys.forEach((key) => {
-      if (key === "jawaban") {
-        const soalKeys = Object.keys(data[0][key] || {});
-        allKeys.push(...soalKeys);
-      } else {
-        allKeys.push(key);
-      }
-    });
+    allKeys = ["id", "tanggal", "hasil"];
+    const soalKeys = getOrderedSoalKeys(data[0].jawaban);
+    allKeys.push(...soalKeys);
   }
 
-  // Render thead (tambah kolom No)
   const headerRow = document.createElement("tr");
   headerRow.innerHTML =
     `<th>No</th>` + allKeys.map((key) => `<th>${key}</th>`).join("");
   tableHead.appendChild(headerRow);
 
-  // Render tbody
   data.forEach((item, index) => {
     const row = document.createElement("tr");
-    let rowHTML = `<td>${index + 1}</td>`; // Tambah nomor urut
+    let rowHTML = `<td>${index + 1}</td>`;
     rowHTML += allKeys
       .map((key) => {
+        if (currentTest === "hipertensi" && item.jawaban?.[key] !== undefined)
+          return `<td>${item.jawaban[key]}</td>`;
         if (item.jawaban?.[key] !== undefined)
           return `<td>${item.jawaban[key]}</td>`;
         if (item.totalSkor?.[key] !== undefined)
@@ -127,22 +129,34 @@ function renderTable(data) {
 }
 
 function filterData() {
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
+  const startInput = document.getElementById("startDate").value;
+  const endInput = document.getElementById("endDate").value;
+
+  const startDate = startInput ? new Date(`${startInput}T00:00:00`) : null;
+  const endDate = endInput ? new Date(`${endInput}T23:59:59`) : null;
 
   const filtered = getCurrentData().filter((item) => {
-    return (!start || item.tanggal >= start) && (!end || item.tanggal <= end);
+    const itemDate = parseJakartaDate(item.tanggal);
+    return (
+      (!startDate || itemDate >= startDate) && (!endDate || itemDate <= endDate)
+    );
   });
 
   renderTable(filtered);
 }
 
 function downloadExcel() {
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
+  const startInput = document.getElementById("startDate").value;
+  const endInput = document.getElementById("endDate").value;
+
+  const startDate = startInput ? new Date(`${startInput}T00:00:00`) : null;
+  const endDate = endInput ? new Date(`${endInput}T23:59:59`) : null;
 
   const filtered = getCurrentData().filter((item) => {
-    return (!start || item.tanggal >= start) && (!end || item.tanggal <= end);
+    const itemDate = parseJakartaDate(item.tanggal);
+    return (
+      (!startDate || itemDate >= startDate) && (!endDate || itemDate <= endDate)
+    );
   });
 
   if (filtered.length === 0) return;
@@ -154,27 +168,21 @@ function downloadExcel() {
       "id",
       "tanggal",
       "hasil",
-      ...Object.keys(filtered[0].jawaban || {}),
+      ...getOrderedSoalKeys(filtered[0].jawaban),
       ...Object.keys(filtered[0].totalSkor || {}),
     ];
   } else {
-    const baseKeys = Object.keys(filtered[0]).filter(
-      (key) => key !== "totalSkor"
-    );
-    baseKeys.forEach((key) => {
-      if (key === "jawaban") {
-        const soalKeys = Object.keys(filtered[0][key] || {});
-        allKeys.push(...soalKeys);
-      } else {
-        allKeys.push(key);
-      }
-    });
+    allKeys = ["id", "tanggal", "hasil"];
+    const soalKeys = getOrderedSoalKeys(filtered[0].jawaban);
+    allKeys.push(...soalKeys);
   }
 
   const excelData = filtered.map((item, index) => {
-    const row = { No: index + 1 }; // Tambah nomor urut
+    const row = { No: index + 1 };
     allKeys.forEach((key) => {
-      if (item.jawaban?.[key] !== undefined) row[key] = item.jawaban[key];
+      if (currentTest === "hipertensi" && item.jawaban?.[key] !== undefined)
+        row[key] = item.jawaban[key];
+      else if (item.jawaban?.[key] !== undefined) row[key] = item.jawaban[key];
       else if (item.totalSkor?.[key] !== undefined)
         row[key] = item.totalSkor[key];
       else row[key] = item[key] ?? "";

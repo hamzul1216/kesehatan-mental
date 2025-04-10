@@ -48,9 +48,9 @@ const hipertensiData = {
       "Segera lakukan pemeriksaan lebih lanjut ke pelayanan fasilitas kesehatan terdekat.",
     tips: "Pencegahan dan penanganan Tekanan Darah Tinggi dapat dilihat di bawah ini:",
     videos: [
-      "https://www.youtube.com/embed/IpFX2vq8HKw?si=i1A44UM9MrcWMylC",
-      "https://www.youtube.com/embed/IpFX2vq8HKw?si=i1A44UM9MrcWMylC",
-      "https://www.youtube.com/embed/IpFX2vq8HKw?si=i1A44UM9MrcWMylC",
+      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
     ],
   },
   negative: {
@@ -59,9 +59,9 @@ const hipertensiData = {
       "Tetap lanjutkan pemeriksaan secara rutin di fasilitas kesehatan terdekat.",
     tips: "Pencegahan dan penanganan Tekanan Darah Tinggi dapat dilihat di bawah ini:",
     videos: [
-      "https://www.youtube.com/embed/IpFX2vq8HKw?si=i1A44UM9MrcWMylC",
-      "https://www.youtube.com/embed/IpFX2vq8HKw?si=i1A44UM9MrcWMylC",
-      "https://www.youtube.com/embed/IpFX2vq8HKw?si=i1A44UM9MrcWMylC",
+      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
+      "https://www.youtube.com/embed/cghXs8sIa_A?si=DHceg46SD7HwveHv",
     ],
   },
 };
