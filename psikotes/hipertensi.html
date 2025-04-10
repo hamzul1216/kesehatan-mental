@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kesehatan Mental</title>
+    <title>HealthScreen</title>
 
     <!-- favicon -->
     <link rel="icon" href="/assets/img/kemenkes-logo.png" type="image/png">
@@ -327,6 +327,66 @@
             border-radius: 12px;
         }
 
+        .screening-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .screening-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        #screening-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        #screening-submit:hover {
+            background-color: #45a049;
+        }
+
         /* Tambahan untuk efek transisi antar pertanyaan */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -368,13 +428,14 @@
     </div>
     <!-- Navbar Start -->
     <nav class="navbar">
-        <a href="../index.html" class="navbar-logo">Kesehatan<span> Mental</span></a>
+        <a href="../index.html" class="navbar-logo">Health<span> Screen</span></a>
 
         <div class="navbar-nav">
             <a href="../index.html">Home</a>
             <a href="../index.html#service">Layanan</a>
-            <a href="../index.html#psikotes">Psikotes</a>
+            <a href="../index.html#psikotes">Tes Online</a>
             <a href="../index.html#blog">Blog</a>
+            <a href="../index.html#about">Tentang</a>
             <a href="../index.html#contact">Kontak</a>
         </div>
 
@@ -401,15 +462,19 @@
                 </p>
                 <button class="card-button">Mulai</button>
                 <div class="card-guide">
-                    <p><strong>Baca panduan pengisiannya, yuk!</strong></p>
+                    <p><strong>Panduan Pengisian Tes:</strong></p>
                     <ul>
-                        <li>Gak ada jawaban yang benar atau salah. Isilah dengan jujur sesuai kepribadianmu.</li>
-                        <li>Santai aja, tes ini gak diberi waktu, kok.</li>
-                        <li>Cari tempat yang nyaman dan kondusif supaya kamu lebih fokus.</li>
-                        <li>Jika kamu keluar di tengah tes, maka seluruh proses tes dan jawaban akan hilang.</li>
-                        <li>Hasil tes bisa kamu dapatkan setelah mengisi semua pertanyaan dengan lengkap.</li>
+                        <li>Tidak ada jawaban yang benar atau salah. Mohon diisi dengan jujur sesuai dengan keadaan
+                            Anda.</li>
+                        <li>Tes ini dapat diisi tanpa batasan waktu, sehingga Anda dapat mengerjakannya dengan santai.
+                        </li>
+                        <li>Disarankan untuk mencari tempat yang nyaman dan kondisinya tenang agar dapat lebih fokus.
+                        </li>
+                        <li>Perlu diperhatikan bahwa jika Anda keluar di tengah proses tes, seluruh data jawaban akan
+                            terhapus dan tidak tersimpan.</li>
+                        <li>Hasil tes akan tersedia setelah Anda menyelesaikan semua pertanyaan secara lengkap.</li>
                     </ul>
-                    <p><strong>Selamat mengisi, ya! :)</strong></p>
+                    <p><strong>Selamat mengerjakan, semoga lancar!</strong></p>
                 </div>
                 <div class="footer-politeknik">
                     <p>Politeknik Kesehatan Kementrian Kesehatan</p>
@@ -454,8 +519,8 @@
     <footer>
         <div class="footer-container">
             <div class="footer-left">
-                <h3>Kesehatan Mental</h3>
-                <p>&copy; 2025 Kesehatan Mental. All rights reserved.</p>
+                <h3>-- Health Screen --</h3>
+                <p>&copy; 2025 Health Screen. All rights reserved.</p>
                 <p class="portofolio">Website ini dibuat oleh | <a href="https://hamzahsite.netlify.app/"
                         target="_blank">Hamzah Hasan</a></p>
             </div>

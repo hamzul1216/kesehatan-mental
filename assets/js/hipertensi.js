@@ -14,6 +14,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressFill = document.getElementById("progress-fill");
   const prevButton = document.getElementById("prev-btn");
   const nextButton = document.getElementById("next-btn");
+  const customCard = document.querySelector(".custom-card");
+
+  // Tambahkan container untuk screening
+  const screeningContainer = document.createElement("div");
+  screeningContainer.className = "screening-container";
+  screeningContainer.style.display = "none";
+  screeningContainer.innerHTML = `
+    <h2>Data Diri</h2>
+    <div class="form-group">
+      <label for="nama">Nama:</label>
+      <input type="text" id="nama" required>
+    </div>
+    <div class="form-group">
+      <label for="usia">Usia:</label>
+      <input type="number" id="usia" required min="1" max="120">
+    </div>
+    <div class="form-group">
+      <label for="jenis-kelamin">Jenis Kelamin:</label>
+      <select id="jenis-kelamin" required>
+        <option value="">Pilih Jenis Kelamin</option>
+        <option value="Laki-laki">Laki-laki</option>
+        <option value="Perempuan">Perempuan</option>
+      </select>
+    </div>
+    <button id="screening-submit" class="card-button">Lanjut ke Pertanyaan</button>
+  `;
+
+  // Tempatkan screeningContainer setelah custom-card
+  customCard.insertAdjacentElement("afterend", screeningContainer);
 
   // Cek apakah user datang dari halaman lain
   const isComingFromOtherPage =
@@ -28,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentQuestionIndex = 0;
   let answers = [];
+  let screeningData = {};
 
   const questions = [
     {
@@ -92,15 +122,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const state = {
       currentQuestionIndex,
       answers,
-      quizStarted:
-        document.querySelector(".custom-card").style.display === "none",
+      quizStarted: customCard.style.display === "none",
+      screeningCompleted: screeningContainer.style.display === "none",
+      screeningData,
     };
     sessionStorage.setItem("hipertensiQuizState", JSON.stringify(state));
   }
 
   // Fungsi untuk memuat state quiz
   function loadQuizState() {
-    // Reset jika datang dari halaman lain
     if (
       isComingFromOtherPage &&
       !sessionStorage.getItem("hipertensiInternalNav")
@@ -114,11 +144,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const state = JSON.parse(savedState);
       currentQuestionIndex = state.currentQuestionIndex || 0;
       answers = state.answers || [];
+      screeningData = state.screeningData || {};
 
       if (state.quizStarted) {
-        document.querySelector(".custom-card").style.display = "none";
-        quizContainer.style.display = "block";
-        loadQuestion();
+        customCard.style.display = "none";
+        if (state.screeningCompleted) {
+          screeningContainer.style.display = "none";
+          quizContainer.style.display = "block";
+          loadQuestion();
+        } else {
+          screeningContainer.style.display = "block";
+        }
       }
     }
   }
@@ -126,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Deteksi jika halaman dimuat dari cache (back/forward navigation)
   window.addEventListener("pageshow", function (event) {
     if (event.persisted) {
-      // Hapus state jika kembali ke halaman melalui navigasi browser
       sessionStorage.removeItem("hipertensiQuizState");
       resetQuiz();
     }
@@ -136,7 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function resetQuiz() {
     currentQuestionIndex = 0;
     answers = [];
-    document.querySelector(".custom-card").style.display = "flex";
+    screeningData = {};
+    customCard.style.display = "flex";
+    screeningContainer.style.display = "none";
     quizContainer.style.display = "none";
     sessionStorage.removeItem("hipertensiQuizState");
   }
@@ -145,12 +182,48 @@ document.addEventListener("DOMContentLoaded", () => {
   loadQuizState();
 
   startButton.addEventListener("click", () => {
-    document.querySelector(".custom-card").style.display = "none";
-    quizContainer.style.display = "block";
-    // Set flag bahwa user datang dari dalam halaman ini
+    customCard.style.display = "none";
+    screeningContainer.style.display = "block";
     sessionStorage.setItem("hipertensiInternalNav", "true");
     saveQuizState();
+  });
+
+  // Handle screening form submission
+  document.getElementById("screening-submit").addEventListener("click", () => {
+    const nama = document.getElementById("nama").value;
+    const usia = document.getElementById("usia").value;
+    const jenisKelamin = document.getElementById("jenis-kelamin").value;
+
+    if (!nama || !usia || !jenisKelamin) {
+      Toastify({
+        text: "Harap isi semua data diri terlebih dahulu",
+        backgroundColor: "#f44336",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+      }).showToast();
+      return;
+    }
+
+    screeningData = { nama, usia, jenisKelamin };
+    screeningContainer.style.display = "none";
+    quizContainer.style.display = "block";
+    saveQuizState();
     loadQuestion();
+
+    // // Save screening data to Firebase
+    // const screeningRef = ref(db, "screening/hipertensi");
+    // const newScreeningRef = push(screeningRef);
+
+    // set(newScreeningRef, {
+    //   userId,
+    //   ...screeningData,
+    //   tanggal: new Date().toLocaleString("sv-SE", {
+    //     timeZone: "Asia/Jakarta",
+    //   }),
+    // }).catch((error) => {
+    //   console.error("Error menyimpan data screening: ", error);
+    // });
   });
 
   function loadQuestion() {
@@ -221,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function fallbackCopyToClipboard(text) {
     const textarea = document.createElement("textarea");
     textarea.value = text;
-    textarea.style.position = "fixed"; // Avoid scrolling to bottom
+    textarea.style.position = "fixed";
     document.body.appendChild(textarea);
     textarea.select();
 
@@ -255,12 +328,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.shareResult = function () {
-    // Ambil uid dan type dari URL parameter jika ada
     const params = new URLSearchParams(window.location.search);
     const uidFromURL = params.get("uid");
     const typeFromURL = params.get("type");
 
-    // Prioritaskan dari URL, lalu dari localStorage
     const uid = uidFromURL || localStorage.getItem("uid");
     const hipertensiType =
       typeFromURL || localStorage.getItem("hipertensiType");
@@ -278,7 +349,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const shareURL = `${window.location.origin}${window.location.pathname}?uid=${uid}&type=${hipertensiType}`;
 
-    // Cek apakah browser mendukung clipboard API
     if (navigator.clipboard) {
       navigator.clipboard
         .writeText(shareURL)
@@ -300,9 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // SIMPAN DAN TAMPILKAN HASIL
   function showResult() {
-    // Pastikan semua pertanyaan dijawab
     if (answers.length < questions.length || answers.includes(undefined)) {
       Toastify({
         text: "Harap jawab semua pertanyaan sebelum melihat hasil.",
@@ -314,18 +382,15 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Hitung jumlah jawaban A dan B
     let countAnswers = { A: 0, B: 0 };
     answers.forEach((ans) => {
       countAnswers[ans === 0 ? "A" : "B"]++;
     });
 
-    // Buat string pola jawaban user dan bandingkan dengan pola risiko
     const riskPattern = "BAAABABBBB";
     const userPattern = answers.map((ans) => (ans === 0 ? "A" : "B")).join("");
     const result = userPattern === riskPattern ? "positive" : "negative";
 
-    // Simpan hasil ke Firebase
     const hipertensiListRef = ref(db, "results/hipertensi");
     const newRef = push(hipertensiListRef);
 
@@ -341,8 +406,11 @@ document.addEventListener("DOMContentLoaded", () => {
         acc[`Q${idx + 1}`] = answers[idx] === 0 ? "A" : "B";
         return acc;
       }, {}),
-      totalSkor: countAnswers,
       userId: userId,
+      // Tambahkan data screening langsung di sini
+      nama: screeningData.nama,
+      usia: screeningData.usia,
+      jenisKelamin: screeningData.jenisKelamin,
     };
 
     set(newRef, data)
@@ -353,7 +421,6 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("hipertensiData", JSON.stringify(data));
         sessionStorage.removeItem("hipertensiQuizState");
 
-        // Tampilkan hasil
         if (window.hipertensiResults && window.hipertensiResults[result]) {
           quizContainer.innerHTML = window.hipertensiResults[result];
         } else {
@@ -363,7 +430,6 @@ document.addEventListener("DOMContentLoaded", () => {
               <p>Anda memiliki risiko hipertensi: ${
                 result === "positive" ? "Tinggi" : "Rendah"
               }</p>
-              <p>Skor A: ${countAnswers.A}, Skor B: ${countAnswers.B}</p>
               <button onclick="shareResult()" class="share-btn">Bagikan Hasil</button>
             </div>
           `;
@@ -391,10 +457,10 @@ document.addEventListener("DOMContentLoaded", () => {
     typeParam &&
     (typeParam === "positive" || typeParam === "negative")
   ) {
-    document.querySelector(".custom-card").style.display = "none";
+    customCard.style.display = "none";
+    screeningContainer.style.display = "none";
     quizContainer.style.display = "block";
 
-    // Coba tampilkan dari localStorage dulu
     const savedData = localStorage.getItem("hipertensiData");
     if (savedData && JSON.parse(savedData).id === uidParam) {
       const data = JSON.parse(savedData);
@@ -407,13 +473,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>Anda memiliki risiko hipertensi: ${
               typeParam === "positive" ? "Tinggi" : "Rendah"
             }</p>
-            <p>Skor A: ${data.totalSkor.A}, Skor B: ${data.totalSkor.B}</p>
             <button onclick="shareResult()" class="share-btn">Bagikan Hasil</button>
           </div>
         `;
       }
     } else {
-      // Tampilkan hasil dasar jika data tidak ditemukan di localStorage
       quizContainer.innerHTML = `
         <div class="result-container">
           <h2>Hasil Tes Hipertensi</h2>

@@ -81,10 +81,13 @@ li {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
 
 /* Navbar */
 .navbar {
@@ -292,7 +295,7 @@ li {
   gap: 3rem;
   max-width: 1000px;
   margin: 0 auto;
-  align-items: stretch; /
+  align-items: stretch;
 }
 
 .psikotes-card {
@@ -462,10 +465,63 @@ li {
   transform: scale(0.98);
 }
 
+/* About Section */
+#about {
+  background-color: var(--primaryBackgroundColor);
+  padding: var(--sectionPadding);
+  text-align: center;
+}
+
+.about h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-desc {
+  margin-bottom: 2rem;
+  color: var(--secondaryTextColor);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: var(--boxShadow);
+  padding: 0.5rem;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+}
+
+.about-card img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid var(--primaryButtonColor);
+}
+
+.about-card h3 {
+  font-size: 1rem;
+  color: var(--primaryTextColor);
+}
+
 /* Contact Section */
 #contact {
   padding: 80px 20px;
   text-align: center;
+  background-color: var(--thirdBackgroundColor);
 }
 
 #contact h2 {
@@ -591,7 +647,7 @@ footer {
   font-size: 0.8rem;
 }
 
-.portofolio a{
+.portofolio a {
   color: white;
   transition: background 0.3s ease, transform 0.2s ease;
 }
@@ -713,6 +769,10 @@ footer {
     flex-direction: column;
     text-align: center;
   }
+
+  .about-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Mobile Phone */
@@ -737,5 +797,9 @@ footer {
     padding: 1rem;
     height: 130px;
     gap: 5px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
   }
 }
