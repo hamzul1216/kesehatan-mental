@@ -12,7 +12,6 @@ function generateHipertensiResult({ type, message, tips, videos }) {
   return `
     <div class="result-container fade-in">
       <div class="card-logos" style = "margin-bottom : 2rem;">
-        <img src="/assets/img/kemenkes-logo.png" alt="Logo 1" class="logo">
         <img src="/assets/img/Desain-tanpa-judul-1.png" alt="Logo 2" class="logo">
       </div>
       <h2 class="result-heading">Hasil Tes Hipertensi Kamu</h2>
@@ -24,6 +23,15 @@ function generateHipertensiResult({ type, message, tips, videos }) {
             <h3>TIPS!</h3>
             <p>${tips}</p>
             ${videoEmbeds}
+          </div>
+          <div style="max-width: 800px; margin: 2rem auto; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <iframe 
+              src="https://drive.google.com/file/d/1YKArfDVKvLQv6ju6HjcD7OxcWI-f2KGL/preview" 
+              width="100%" 
+              height="600px" 
+              style="border: none;"
+              allowfullscreen>
+            </iframe>
           </div>
           <div class="share">
             <p>Yuk, Bagikan hasil tesmu!</p>

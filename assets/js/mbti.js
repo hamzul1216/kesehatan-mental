@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const shareURL = `${window.location.origin}/psiko
+    const shareURL = `${window.location.origin}/psikotes
     /mbti.html?uid=${uid}&type=${mbti}`;
     navigator.clipboard.writeText(shareURL).then(() => {
       Toastify({
