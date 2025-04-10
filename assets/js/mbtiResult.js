@@ -7,6 +7,9 @@ function generateMBTIResult({
 }) {
   return `
     <div class="result-container fade-in">
+      <div class="card-logos" style = "margin-bottom : 2rem;">
+        <img src="/assets/img/Desain-tanpa-judul-1.png" alt="Logo 2" class="logo">
+      </div>
       <h2 class="result-heading">Hasil Tes MBTI Kamu</h2>
       <div class="result-card">
         <div class="info-wrapper">
@@ -22,6 +25,11 @@ function generateMBTIResult({
           </div>
         </div>
         <button class="card-button" onclick="location.reload()">Coba Lagi</button>
+      </div>
+      <div class="footer-politeknik">
+        <p>Politeknik Kesehatan Kementrian Kesehatan</p>
+        <p>Profesi Ners 2025</p>
+        <p>Kelompok 3 Reguler 2</p>
       </div>
     </div>
   `;

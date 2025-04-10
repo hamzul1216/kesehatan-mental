@@ -507,7 +507,7 @@ li {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
   margin-bottom: 1rem;
   border: 3px solid var(--primaryButtonColor);
 }
