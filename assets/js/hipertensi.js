@@ -387,9 +387,19 @@ document.addEventListener("DOMContentLoaded", () => {
       countAnswers[ans === 0 ? "A" : "B"]++;
     });
 
-    const riskPattern = "BAAABABBBB";
-    const userPattern = answers.map((ans) => (ans === 0 ? "A" : "B")).join("");
-    const result = userPattern === riskPattern ? "positive" : "negative";
+    // const riskPattern = "BAAABABBBB";
+    // const userPattern = answers.map((ans) => (ans === 0 ? "A" : "B")).join("");
+    // const result = userPattern === riskPattern ? "positive" : "negative";
+    const isPositive =
+      answers[0] === 1 || // Pertanyaan 1 jawab B
+      answers[6] === 0 || // Pertanyaan 7 jawab A
+      answers[9] === 0; // Pertanyaan 10 jawab A
+
+    const result = isPositive ? "positive" : "negative";
+    const resultData =
+      result === "positive"
+        ? "Beresiko Hipertensi"
+        : "Tidak Beresiko Hipertensi";
 
     const hipertensiListRef = ref(db, "results/hipertensi");
     const newRef = push(hipertensiListRef);
@@ -401,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = {
       id: newRef.key,
       tanggal: tanggalSekarang,
-      hasil: result,
+      hasil: resultData,
       jawaban: questions.reduce((acc, q, idx) => {
         acc[`Q${idx + 1}`] = answers[idx] === 0 ? "A" : "B";
         return acc;
