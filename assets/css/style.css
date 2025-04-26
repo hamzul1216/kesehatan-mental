@@ -490,6 +490,22 @@ li {
   margin: 0 auto;
 }
 
+.last-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.status-pembimbing {
+  margin-bottom: 1rem;
+}
+
+.about-dosen {
+  margin-top: 2.5rem;
+}
+
 .about-card {
   background: white;
   border-radius: 10px;
@@ -773,6 +789,11 @@ footer {
   .about-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .last-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* Mobile Phone */
@@ -800,6 +821,10 @@ footer {
   }
 
   .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .last-row {
     grid-template-columns: 1fr;
   }
 }
